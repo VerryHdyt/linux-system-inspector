@@ -10,7 +10,7 @@ grep -q 'Usage:' <<<"$help_output" || fail "help output missing Usage"
 pass "help output"
 
 version_output="$(bash "$CLI" version)" || fail "version command failed"
-grep -q '0.1.0' <<<"$version_output" || fail "version output incorrect"
+grep -q '0.2.0' <<<"$version_output" || fail "version output incorrect"
 pass "version output"
 
 host_output="$(bash "$CLI" host)" || fail "host command failed"
@@ -28,6 +28,15 @@ pass "memory inspection"
 disk_output="$(bash "$CLI" disk)" || fail "disk command failed"
 grep -q 'FILESYSTEMS' <<<"$disk_output" || fail "disk output missing heading"
 pass "disk inspection"
+
+
+plain_output="$(bash "$CLI" --plain memory)" || fail "plain memory command failed"
+grep -q 'MEMORY' <<<"$plain_output" || fail "plain mode output missing MEMORY heading"
+pass "plain mode"
+
+no_anim_output="$(bash "$CLI" --no-anim host)" || fail "no-animation host command failed"
+grep -q 'HOST' <<<"$no_anim_output" || fail "no-animation output missing HOST heading"
+pass "animation opt-out"
 
 if bash "$CLI" definitely-not-a-command >/dev/null 2>&1; then
   fail "unknown command should return non-zero"
