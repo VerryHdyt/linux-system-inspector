@@ -180,7 +180,10 @@ main() {
     arg="$1"; shift
     case "$arg" in
       --no-anim) ANIMATE=0 ;;
-      --plain)\n        COLOR=0; ANIMATE=0\n        RESET=''; BOLD=''; DIM=''; CYAN=''; BLUE=''; GREEN=''; YELLOW=''; RED=''; MAGENTA=''\n        ;;
+      --plain)
+        COLOR=0; ANIMATE=0
+        RESET=''; BOLD=''; DIM=''; CYAN=''; BLUE=''; GREEN=''; YELLOW=''; RED=''; MAGENTA=''
+        ;;
       help|-h|--help) usage; return 0 ;;
       version|-v|--version) printf '%s %s\n' "$PROG" "$VERSION"; return 0 ;;
       summary|host|cpu|memory|disk|processes|network|all)
