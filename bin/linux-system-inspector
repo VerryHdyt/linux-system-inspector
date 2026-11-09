@@ -16,8 +16,8 @@ fi
 
 # ANSI palette. All styling is automatically disabled for pipes and redirected output.
 if (( COLOR )); then
-  readonly RESET=$'\033[0m' BOLD=$'\033[1m' DIM=$'\033[2m'
-  readonly CYAN=$'\033[36m' BLUE=$'\033[34m' GREEN=$'\033[32m'
+  RESET=$'\033[0m' BOLD=$'\033[1m' DIM=$'\033[2m'
+  CYAN=$'\033[36m' BLUE=$'\033[34m' GREEN=$'\033[32m'
   readonly YELLOW=$'\033[33m' RED=$'\033[31m' MAGENTA=$'\033[35m'
 else
   RESET='' BOLD='' DIM='' CYAN='' BLUE='' GREEN='' YELLOW='' RED='' MAGENTA=''
@@ -175,7 +175,7 @@ EOF
 }
 
 main() {
-  local command="summary" arg
+  local command="summary" arg command_set=0
   while (($#)); do
     arg="$1"; shift
     case "$arg" in
@@ -187,7 +187,8 @@ main() {
       help|-h|--help) usage; return 0 ;;
       version|-v|--version) printf '%s %s\n' "$PROG" "$VERSION"; return 0 ;;
       summary|host|cpu|memory|disk|processes|network|all)
-        [[ "$command" == summary ]] || die "Only one command may be supplied."
+        (( command_set == 0 )) || die "Only one command may be supplied."
+        command_set=1
         command="$arg"
         ;;
       *) die "Unknown option or command: $arg (try '$PROG --help')" ;;
