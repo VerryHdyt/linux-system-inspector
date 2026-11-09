@@ -20,7 +20,7 @@ if (( COLOR )); then
   readonly CYAN=$'\033[36m' BLUE=$'\033[34m' GREEN=$'\033[32m'
   readonly YELLOW=$'\033[33m' RED=$'\033[31m' MAGENTA=$'\033[35m'
 else
-  readonly RESET='' BOLD='' DIM='' CYAN='' BLUE='' GREEN='' YELLOW='' RED='' MAGENTA=''
+  RESET='' BOLD='' DIM='' CYAN='' BLUE='' GREEN='' YELLOW='' RED='' MAGENTA=''
 fi
 
 die() { printf '%sError:%s %s\n' "$RED" "$RESET" "$*" >&2; exit 1; }
@@ -180,7 +180,7 @@ main() {
     arg="$1"; shift
     case "$arg" in
       --no-anim) ANIMATE=0 ;;
-      --plain) COLOR=0; ANIMATE=0 ;;
+      --plain)\n        COLOR=0; ANIMATE=0\n        RESET=''; BOLD=''; DIM=''; CYAN=''; BLUE=''; GREEN=''; YELLOW=''; RED=''; MAGENTA=''\n        ;;
       help|-h|--help) usage; return 0 ;;
       version|-v|--version) printf '%s %s\n' "$PROG" "$VERSION"; return 0 ;;
       summary|host|cpu|memory|disk|processes|network|all)
