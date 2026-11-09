@@ -1,79 +1,136 @@
 # Linux System Inspector
 
-A lightweight, terminal-based system inspection toolkit for Linux. The goal of this project is to make essential system information easy to inspect from a single, scriptable command-line interface.
+A lightweight, read-only command-line tool for inspecting essential Linux system information. It is written in Bash and uses standard Linux interfaces and utilities.
 
-> **Project status:** Documentation and initial project setup. The implementation is under development; commands described in the roadmap are planned, not yet available.
+## Features
 
-## Goals
+- **Host:** hostname, OS release, kernel, architecture, and uptime.
+- **CPU:** processor model, logical CPU count, and 1/5/15-minute load averages.
+- **Memory:** RAM total, used, available, and swap usage.
+- **Disk:** mounted filesystem capacity and usage.
+- **Processes:** top 10 processes sorted by CPU usage.
+- **Network:** interfaces and IP addresses using `ip` (or `ifconfig` as fallback).
+- **Read-only:** the inspection commands do not change system configuration.
+- **Low dependency footprint:** Bash plus common Linux utilities.
 
-- Provide a clear snapshot of Linux host and operating-system information.
-- Inspect CPU, memory, storage, uptime, and running processes.
-- Keep output readable in a terminal and suitable for shell scripting.
-- Avoid unnecessary dependencies and keep the tool lightweight.
-- Support common Linux distributions where the required system interfaces are available.
+## Requirements
 
-## Planned capabilities
+- Linux with readable `/proc` filesystem.
+- Bash 4+ recommended.
+- `df`, `ps`, `hostname`, and `uname` for the corresponding sections.
+- `iproute2` (`ip`) or `net-tools` (`ifconfig`) for network inspection.
+- Root access is not required for normal use.
 
-| Area | Planned information |
+## Quick start
+
+Clone the repository:
+
+```bash
+git clone https://github.com/VerryHdyt/linux-system-inspector.git
+cd linux-system-inspector
+```
+
+Run directly with Bash:
+
+```bash
+bash bin/linux-system-inspector
+bash bin/linux-system-inspector memory
+bash bin/linux-system-inspector disk
+```
+
+Install system-wide:
+
+```bash
+sudo make install
+linux-system-inspector
+linux-system-inspector processes
+```
+
+The default install location is `/usr/local/bin`. Override it with `make install PREFIX=/custom/path`.
+
+## Commands
+
+| Command | Description |
 | --- | --- |
-| Host | Hostname, kernel, architecture, uptime |
-| CPU | Model, logical core count, load averages |
-| Memory | Total, used, available, and swap |
-| Storage | Mounted filesystems, capacity, and usage |
-| Processes | Top processes by CPU and memory usage |
-| Network | Interfaces, addresses, and basic link statistics |
+| `summary` | Host, CPU, memory, and disk overview (default) |
+| `host` | Host and operating-system details |
+| `cpu` | CPU model, logical cores, and load averages |
+| `memory` | RAM and swap usage |
+| `disk` | Mounted filesystem usage |
+| `processes` | Top 10 processes by CPU usage |
+| `network` | Network interfaces and addresses |
+| `all` | Every available inspection section |
+| `help` | Usage information |
+| `version` | Version information |
 
-The exact command interface and supported platforms will be documented as implementation progresses.
+Examples:
 
-## Design principles
+```bash
+linux-system-inspector
+linux-system-inspector cpu
+linux-system-inspector all
+```
 
-1. **Read-only by default** — inspection must not modify system configuration.
-2. **Least privilege** — do not require root unless a future feature clearly needs it.
-3. **Portable where practical** — prefer standard Linux interfaces such as `/proc`, `/sys`, and common userland utilities.
-4. **Safe output** — handle unavailable fields and permission errors without crashing.
-5. **Script-friendly** — provide a machine-readable output format when the core interface is established.
+## Development
 
-## Repository layout
+Run the smoke tests:
 
-The project structure will evolve with the implementation. The intended layout is:
+```bash
+make test
+```
+
+Check Bash syntax:
+
+```bash
+make check
+```
+
+The GitHub Actions workflow runs syntax checks and CLI smoke tests on pushes and pull requests targeting `main`.
+
+## Project structure
 
 ```text
 linux-system-inspector/
-├── README.md
-├── src/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── bin/
+│   └── linux-system-inspector
 ├── tests/
-├── docs/
-└── LICENSE
+│   └── test_cli.sh
+├── Makefile
+└── README.md
 ```
 
-## Getting started
+## Limitations
 
-There is no runnable release yet. Once the first implementation is available, this section will include installation instructions, dependencies, and example commands.
+- This initial release targets Linux; it is not intended for macOS or BSD.
+- Some process or network details may be hidden by permissions or container isolation.
+- Disk output depends on the host's `df` implementation.
+- The tool currently provides human-readable output only; JSON output is planned.
 
-## Development roadmap
+## Roadmap
 
-- [ ] Choose the implementation language and CLI interface.
-- [ ] Add host and kernel information collection.
-- [ ] Add CPU and memory inspection.
-- [ ] Add filesystem and storage reporting.
-- [ ] Add process summaries.
-- [ ] Add unit tests and error-handling tests.
-- [ ] Add JSON output and usage examples.
-- [ ] Document supported distributions and release packaging.
+- [x] Host and kernel information
+- [x] CPU and load average inspection
+- [x] RAM and swap inspection
+- [x] Filesystem usage
+- [x] Process overview
+- [x] Network interface overview
+- [x] CLI help and version commands
+- [x] Smoke tests and GitHub Actions CI
+- [ ] Machine-readable JSON output
+- [ ] Configurable process sorting and result limits
+- [ ] Release packaging
 
 ## Contributing
 
-Issues and focused contributions are welcome. Before opening a pull request:
-
-1. Keep changes small and focused.
-2. Add or update tests for behavior changes.
-3. Document new options and platform limitations.
-4. Ensure inspection commands remain read-only unless explicitly documented otherwise.
+Issues and pull requests are welcome. Keep changes focused, test behavior changes, and document platform-specific limitations. Do not add commands that modify the host without clearly separating them from read-only inspection features.
 
 ## Security
 
-This tool is intended for local system inspection. Do not run untrusted builds with elevated privileges. Please report security concerns privately to the repository owner rather than publishing sensitive details in an issue.
+The tool is designed for local inspection and does not intentionally modify system state. Review scripts before running them, especially when installing software with elevated privileges.
 
 ## License
 
-No license has been added yet. Until a license is included in the repository, all rights are reserved by the copyright holder.
+No license has been added yet. All rights remain with the copyright holder.
