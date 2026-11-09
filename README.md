@@ -10,7 +10,10 @@ A polished, lightweight, read-only Linux system inspector built in Bash. It comb
 - **Disk:** mounted filesystem capacity and usage.
 - **Processes:** top 10 processes sorted by CPU usage.
 - **Network:** interfaces and IP addresses using `ip` (or `ifconfig` as fallback).
-- **Terminal experience:** animated startup spinner and a compact banner in interactive terminals, with colored section headings.\n- **Memory visualization:** usage percentage and a compact terminal bar.\n- **Accessible output:** colors and animation automatically turn off for redirected output; `--no-anim` and `--plain` are available.\n- **Read-only:** the inspection commands do not change system configuration.
+- **Terminal experience:** animated startup spinner and a compact banner in interactive terminals, with colored section headings.
+- **Memory visualization:** usage percentage and a compact terminal bar.
+- **Accessible output:** colors and animation automatically turn off for redirected output; `--no-anim` and `--plain` are available.
+- **Read-only:** the inspection commands do not change system configuration.
 - **Low dependency footprint:** Bash plus common Linux utilities.
 
 ## Requirements
@@ -35,7 +38,9 @@ Run directly with Bash:
 ```bash
 bash bin/linux-system-inspector
 bash bin/linux-system-inspector memory
-bash bin/linux-system-inspector disk\nbash bin/linux-system-inspector --no-anim all\nbash bin/linux-system-inspector --plain memory
+bash bin/linux-system-inspector disk
+bash bin/linux-system-inspector --no-anim all
+bash bin/linux-system-inspector --plain memory
 ```
 
 Install system-wide:
@@ -61,7 +66,12 @@ The default install location is `/usr/local/bin`. Override it with `make install
 | `network` | Network interfaces and addresses |
 | `all` | Every available inspection section |
 | `help` | Usage information |
-| `version` | Version information |\n\nGlobal options:\n\n- `--no-anim` disables the startup animation.\n- `--plain` disables both color and animation.
+| `version` | Version information |
+
+Global options:
+
+- `--no-anim` disables the startup animation.
+- `--plain` disables both color and animation.
 
 Examples:
 
@@ -117,7 +127,9 @@ linux-system-inspector/
 - [x] Filesystem usage
 - [x] Process overview
 - [x] Network interface overview
-- [x] CLI help and version commands\n- [x] Animated interactive terminal intro\n- [x] Adaptive color output and memory usage bar
+- [x] CLI help and version commands
+- [x] Animated interactive terminal intro
+- [x] Adaptive color output and memory usage bar
 - [x] Smoke tests and GitHub Actions CI
 - [ ] Machine-readable JSON output
 - [ ] Configurable process sorting and result limits
