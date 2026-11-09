@@ -1,0 +1,29 @@
+name: Shell CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: CLI smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Check Bash syntax
+        run: bash -n bin/linux-system-inspector tests/test_cli.sh
+      - name: Run CLI tests
+        run: bash tests/test_cli.sh
+      - name: Check shell style when ShellCheck is available
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            shellcheck bin/linux-system-inspector tests/test_cli.sh
+          else
+            echo "ShellCheck is not installed; skipping optional lint."
+          fi
